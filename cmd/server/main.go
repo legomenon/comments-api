@@ -1,13 +1,13 @@
 package main
 
 import (
-	"context"
 	"errors"
 	"fmt"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/legomenon/comments-api/internal/comment"
 	"github.com/legomenon/comments-api/internal/db"
+	transportHttp "github.com/legomenon/comments-api/internal/transport/http"
 )
 
 func Run() error {
@@ -29,20 +29,11 @@ func Run() error {
 
 	cmtService := comment.NewService(db)
 
-	cmtService.PostComment(
-		context.Background(),
-		comment.Comment{
-			ID:     "0c7e49f2-9238-4306-a401-4add08aa574d",
-			Slug:   "Manual test",
-			Body:   "hello world",
-			Author: "Legomenon",
-		},
-	)
+	httpHandler := transportHttp.NewHandler(cmtService)
+	if err = httpHandler.Serve(); err != nil {
+		return err
+	}
 
-	fmt.Println(cmtService.GetComment(
-		context.Background(),
-		"0c7e49f2-9238-4306-a401-4add08aa574d",
-	))
 	return nil
 }
 
