@@ -2,7 +2,6 @@ package http
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -11,9 +10,6 @@ import (
 
 	"github.com/gorilla/mux"
 )
-
-type CommentService interface {
-}
 
 type Handler struct {
 	Service CommentService
@@ -38,9 +34,10 @@ func NewHandler(service CommentService) *Handler {
 }
 
 func (h *Handler) mapRoutes() {
-	h.Router.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "hello world")
-	})
+	h.Router.HandleFunc("/api/v1/comment", h.PostComment).Methods("POST")
+	h.Router.HandleFunc("/api/v1/comment/{id}", h.GetComment).Methods("GET")
+	h.Router.HandleFunc("/api/v1/comment/{id}", h.UpdateComment).Methods("PUT")
+	h.Router.HandleFunc("/api/v1/comment/{id}", h.DeleteComment).Methods("DELETE")
 }
 
 func (h *Handler) Serve() error {
