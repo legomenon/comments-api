@@ -1,3 +1,5 @@
+# Comments API build with gorilla/mux, postgres and docker
+
 # Dockerizing:
 ```bash
 docker build -t comments-api .
