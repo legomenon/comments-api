@@ -10,3 +10,4 @@ docker build -t comments-api .
 ```bash
 docker compose up
 ```
+using: docker, go std lib, postgres, migrate
